@@ -1,0 +1,137 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-dialog-behavior/paper-dialog-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="x-register-by-face">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+      paper-button.indigo {
+        background-color: var(--paper-indigo-500);
+        color: white;
+     }
+     #modal {
+       width: 50%;
+     }
+    </style>
+
+    <iron-ajax
+      auto
+        url="http://localhost:8080/api/image"
+        handle-as="json"
+        body= "{{picture}}"
+        method="POST"
+        on-response="handleResponse"
+        headers='{"content-type": "application/json"}'
+      debounce-duration="300"></iron-ajax>
+
+  <paper-dialog id="modal" entry-animation="scale-up-animation" exit-animation="fade-out-animation" no-cancel-on-outside-click>
+    <p>{{modalText}}</p>
+    <div class="buttons">
+      <paper-button dialog-confirm autofocus>Close</paper-button>
+    </div>
+  </paper-dialog>
+
+    <div class="card">
+      <h1>Register Students</h1>
+        <center><video id="video" width="640" height="480" autoplay></video></center>
+        <center><paper-button raised class="indigo" on-tap="tapSnap" disabled="{{modalSpinner}}">Take Picture</paper-button></center>
+
+        <canvas id="canvas" width="640" height="480" hidden="true"></canvas>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'x-register-by-face',
+
+      properties: {
+        prop1: {
+          type: String,
+          value: 'ap-springboot-demo-app',
+        },
+        picture: {
+          type: Object,
+          value: null
+        },
+        modalText: {
+          type: String,
+          value: 'Modal'
+        },
+        modalSpinner: {
+          type: Boolean,
+          value: false
+        }
+      },
+      ready: function() {
+        var video = this.$.video;
+        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+           // Not adding `{ audio: true }` since we only want video now
+          navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+          var streamObjectUrl = window.URL.createObjectURL(stream)
+          console.log(streamObjectUrl);
+          video.src = streamObjectUrl;
+          video.play();
+          });
+        }
+      },
+      tapSnap: function() {
+         var canvas = this.$.canvas;
+         var context = canvas.getContext('2d');
+         var video = this.$.video;
+         context.drawImage(video, 0, 0, 640, 480);
+         
+         //Add timestamp
+         context.font = "15px Arial";
+         context.fillStyle = "red";
+         context.fillText(Date(),10,50);
+
+         var data = canvas.toDataURL('image/png');
+         var imgData = data.replace(/^data:image\/(png|jpg);base64,/, "");
+         this.picture = {image: imgData};
+
+         this.modalText = "Hold on... checking your face now :-)."
+         this.modalSpinner = true;
+         this.$.modal.open();
+      },
+      handleResponse: function(res) {
+        console.log(res);
+        this.modalText = "Welcome student! :-)"; //Improve response
+        this.modalSpinner = false;
+      }
+
+    });
+
+    
+
+    
+  </script>
+</dom-module>
+
+
+
+<dom-module id="ap-springboot-demo-app">
+  
+</dom-module>
+
