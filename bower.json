@@ -1,9 +1,9 @@
 {
-  "name": "polymer-starter-kit",
+  "name": "x-attendence-checking",
   "authors": [
-    "The Polymer Authors"
+    "Tom Cools"
   ],
-  "license": "https://polymer.github.io/LICENSE.txt",
+  "license": "http://tomcools.be",
   "dependencies": {
     "app-layout": "PolymerElements/app-layout#^0.10.0",
     "app-route": "PolymerElements/app-route#^0.9.0",
