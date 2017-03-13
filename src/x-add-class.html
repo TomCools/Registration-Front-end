@@ -12,6 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="x-add-class">
@@ -23,10 +24,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
       }
     </style>
+    <app-location route="{{route}}"></app-location>
 
     <div class="card">
       <h1>Create new Class details</h1>
-      <form is="iron-form" action="/someform" id="inputform">
+      <form is="iron-form" id="inputform">
         <paper-input name="classname" label="Class Name" required></paper-input>
         <paper-input name="lector" label="Lector" required></paper-input>
         <paper-input name="topic" label="Topic" required></paper-input>
@@ -51,10 +53,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.request.headers={"content-type": "application/json"};
           console.log("Event fire :-)");
         });
-        this.$.inputform.addEventListener('iron-form-response', this.formResponse);
-      },
-      formResponse: function(event) {
-        console.log("event retrieved");
+        var self = this;
+        this.$.inputform.addEventListener('iron-form-response', function(event) {
+          console.log("Yeey :-)");
+          //TODO check success
+            self.set('route.path', '/classes-overview');
+          });
       }
     });
   </script>

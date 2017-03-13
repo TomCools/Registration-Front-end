@@ -30,13 +30,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: var(--paper-indigo-500);
         color: white;
      }
-     #modal {
-       width: 50%;
-     }
     </style>
 
     <iron-ajax
-      auto
+        id="imageAjax"
         url="http://localhost:8080/api/image"
         handle-as="json"
         body= "{{picture}}"
@@ -56,7 +53,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <h1>Register Students</h1>
         <center><video id="video" width="640" height="480" autoplay></video></center>
         <center><paper-button raised class="indigo" on-tap="tapSnap" disabled="{{modalSpinner}}">Take Picture</paper-button></center>
-
         <canvas id="canvas" width="640" height="480" hidden="true"></canvas>
     </div>
   </template>
@@ -111,13 +107,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          var imgData = data.replace(/^data:image\/(png|jpg);base64,/, "");
          this.picture = {image: imgData};
 
+         this.$.imageAjax.generateRequest();
          this.modalText = "Hold on... checking your face now :-)."
          this.modalSpinner = true;
          this.$.modal.open();
       },
       handleResponse: function(res) {
         console.log(res);
-        this.modalText = "Welcome student! :-)"; //Improve response
+        this.modalText = "Welcome " + res.detail.response.studentName; //Improve response
         this.modalSpinner = false;
       }
 
@@ -127,11 +124,5 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     
   </script>
-</dom-module>
-
-
-
-<dom-module id="ap-springboot-demo-app">
-  
 </dom-module>
 
