@@ -30,6 +30,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: var(--paper-indigo-500);
         color: white;
      }
+
+     paper-dialog#modal {
+      width: 600px;
+      height: 150px;
+      overflow: auto;
+    }
+    
     </style>
 
     <iron-ajax
@@ -42,18 +49,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         headers='{"content-type": "application/json"}'
       debounce-duration="300"></iron-ajax>
 
-  <paper-dialog id="modal" entry-animation="scale-up-animation" exit-animation="fade-out-animation" no-cancel-on-outside-click>
-    <p>{{modalText}}</p>
-    <div class="buttons">
-      <paper-button dialog-confirm autofocus>Close</paper-button>
-    </div>
-  </paper-dialog>
 
     <div class="card">
       <h1>Register Students</h1>
         <center><video id="video" width="640" height="480" autoplay></video></center>
         <center><paper-button raised class="indigo" on-tap="tapSnap" disabled="{{modalSpinner}}">Take Picture</paper-button></center>
         <canvas id="canvas" width="640" height="480" hidden="true"></canvas>
+
+        <paper-dialog id="modal" entry-animation="scale-up-animation" exit-animation="fade-out-animation" no-cancel-on-outside-click>
+          <p style="font-size: 28px">{{modalText}}</p>
+          <div class="buttons">
+          <paper-button dialog-confirm autofocus>Close</paper-button>
+          </div>
+        </paper-dialog>
     </div>
   </template>
 
