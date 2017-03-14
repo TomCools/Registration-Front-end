@@ -27,7 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
        table {
-                width: 100%
+                width: 50%
             }
 
       td {
@@ -54,68 +54,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <iron-ajax
-        id="ajax"
+        id="classAjax"
         auto
-        url="http://localhost:8080/api/classes"
+        url="{{classurl}}"
         handle-as="json"
         method="GET"
-        on-response="handleResponse"
+        on-response="handleClassResponse"
       debounce-duration="300"></iron-ajax>
-    <iron-ajax
-        id="updateAjax"
+      <iron-ajax
+        id="presenceAjax"
+        auto
+        url="{{presenceurl}}"
         handle-as="json"
-        method="PUT"
-        on-response="handleUpdate"
-        headers='{"content-type": "application/json"}'
+        method="GET"
+        on-response="handlePresenceResponse"
       debounce-duration="300"></iron-ajax>
 <app-location route="{{route}}"></app-location>
 
-
-
- <div class="container-fluid">
+   <div class="container-fluid">
   <div class="row">
    <div class="card">
     <div class="col-md-6 col-sm-12 col-lg-7">
       <h1>Class Details</h1>
+      <ul>
+        <li>Name: {{class.classname}}</li>
+        <li>Lector: {{class.lector}}</li>
+        <li>Topic: {{class.topic}}</li>
+      </ul>
+      <h1>Students</h1>
       <table class="table table-hover">
             <tr>
-              <th>Class Name</th>
-              <th>Lector</th>
-              <th>Topic</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th>Student Name</th>
+              <th>Arrival</th>
             </tr>
-      <template is="dom-repeat" items="{{classes}}">
+      <template is="dom-repeat" items="{{presence}}">
             <tr>
-              <td>{{item.classname}}</td>
-              <td>{{item.lector}}</td>
-              <td>{{item.topic}}</td>
-              <td>
-                <template is="dom-if" if="{{!item.closed}}">
-                            "OPEN"
-                 </template>
-                 <template is="dom-if" if="{{item.closed}}">
-                            "CLOSED"
-                 </template>
-              </td>
-              <td>
-                 <template is="dom-if" if="{{!item.closed}}">
-                   <paper-button raised class="green" on-tap="continue" data-args$="{{item.id}}">To Registration</paper-button>
-                   <paper-button raised class="red" on-tap="close" data-args$="{{item.id}}">Close</paper-button>
-                 </template>
-                 <template is="dom-if" if="{{item.closed}}">
-                   <paper-button raised class="yellow" on-tap="todetails" data-args$="{{item.id}}">To Details</paper-button>
-                 </template>
-              </td>
+              <td>{{item.studentName}}</td>
+              <td>{{item.arrival}}</td>
             </tr>
       </template>
     </table>
     <br>
-    </div>
-        <div class="card-actions">
-          <paper-button raised class="green" on-tap="add">Add New Course</paper-button>
-        </div>
-      </div>
      </div>
     </div>
   </template>
@@ -124,43 +103,50 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'x-class-details',
       properties: {
-         classes: {
+         class: {
+          type: Object,
+          value: {}
+        },
+        presence: {
           type: Array,
           value: []
         },
+        classurl: {
+          type: String
+        },
+        presenceurl: {
+          type: String
+        }
       },
+      observers: [
+        'handleRouteChanged(route)',
+      ],
+      
       created : function(){
         var self = this;
         document.addEventListener('page-changed', function(e){
-                self.$.classes = [];
-                self.$.ajax.generateRequest();
+                self.class =  {};
+                self.presence = [];
+                self.$.classAjax.generateRequest();
+                self.$.presenceAjax.generateRequest();
         });
       },
-      continue: function(e) {
-        var args = e.target.getAttribute('data-args');
-        this.set('route.path', '/register-by-face/'+args);
+      handleRouteChanged: function(route) {
+          console.log(route);
+          var id = route.path.split('/')[2];
+          console.log(id);
+          if(id) {
+              this.classurl = "http://localhost:8080/api/classes/"+id;
+              this.presenceurl = "http://localhost:8080/api/classes/"+id+"/presence";
+          } 
       },
-      add: function(e) {
-        this.set('route.path', '/add-class');
-      },
-      close: function(e) {
-        var args = e.target.getAttribute('data-args');
-        var ajax = this.$.updateAjax;
-        ajax.url="http://localhost:8080/api/classes/"+args;
-        var result = this.classes.filter(function( obj ) {
-          return obj.id == args;
-        })[0];
-        result.closed = true;
-        ajax.body=result;
-        ajax.generateRequest()
-      },
-      handleResponse: function(response) {
-        console.log(response);
+      handleClassResponse: function(response) {
         console.log(response.detail.response)
-        this.classes = response.detail.response;
+        this.class = response.detail.response;
       },
-      handleUpdate: function() {
-        this.$.ajax.generateRequest();
+      handlePresenceResponse: function(response) {
+        console.log(response.detail.response)
+        this.presence = response.detail.response;
       }
     });
   </script>

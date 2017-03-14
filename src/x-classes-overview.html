@@ -140,6 +140,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var args = e.target.getAttribute('data-args');
         this.set('route.path', '/register-by-face/'+args);
       },
+      todetails: function(e) {
+        var args = e.target.getAttribute('data-args');
+        this.set('route.path', '/class-details/'+args);
+      },
       add: function(e) {
         this.set('route.path', '/add-class');
       },
