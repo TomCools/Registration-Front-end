@@ -31,7 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
       td {
-                max-width: 100px;
+                max-width: 200px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -90,7 +90,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <template is="dom-repeat" items="{{presence}}">
             <tr>
               <td>{{item.studentName}}</td>
-              <td>{{item.arrival}}</td>
+              <td>{{item.date}}</td>
             </tr>
       </template>
     </table>
@@ -146,6 +146,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       handlePresenceResponse: function(response) {
         console.log(response.detail.response)
+        var presence = response.detail.response;
+        for (i = 0; i < presence.length; i++) { 
+          var pres = presence[i];
+          pres.date = new Date(pres.arrival);
+          presence[i] = pres;
+        }
         this.presence = response.detail.response;
       }
     });
