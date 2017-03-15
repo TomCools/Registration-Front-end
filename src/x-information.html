@@ -30,11 +30,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: bold;
       }
     </style>
-   <div class="card">
-      <h1>Introduction</h1>
-      Introduction
-    </div>
-
     <div class="card">
     <h1>Task 1: API endpoints for Classes</h1>
     <p>Create the API endpoints. Hardcode the responses for Task 1</p>
@@ -42,8 +37,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <ul>
             <li>POST [/api/classes]: Creates a new Class</li>
             <li>GET  [/api/classes]: Collects list of Classes</li>
-            <li>GET  [/api/classes/1]: Gets the Class with ID 1 (make ID configurable)</li>
-            <li>PUT  [/api/classes/1]: Updates the class with ID 1 (make ID configurable), Updating is used for Closing the class</li>
+            <li>GET  [/api/classes/1]: Gets the Class with ID 1 (make sure the ID is a variable!)</li>
+            <li>PUT  [/api/classes/1]: Updates the class with ID 1 (make sure the ID is a variable!), Updating is used for Closing the class</li>
         </ul>
     </p>
     <p>The "ClassRegistration" has the following properties which must be returned as JSON</p>
@@ -66,7 +61,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </p>
     <p>
         <ul>
-            <li>GET [/api/classes/1/presence]: Gets the list of people present in a class. 1 is the ID of a class. Make this configurable.</li>
+            <li>GET [/api/classes/1/presence]: Gets the list of people present in a class. 1 is the ID of a class. (make sure the ID is a variable!)</li>
         </ul>
     </p>
     <p>The "Presence" entity has the following properties which must be returned as JSON</p>
@@ -114,8 +109,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         To do a face detection, the following steps are required.
         <ul>
           <li>Detect a face using the byte[] image. This is provided to you already</li>
-          <li>Using the faceId from the DetectedFace object, call the identify(...) method. You need to wrap the faceId in a List of String.</li>
-          <li>The Identify method returns a Identification which contains a list of IdentificationCandidates. Select the Candidate with the highest confidence.</li>
+    <li>Using the faceId from the DetectedFace object, call the identify(...) method. You need to wrap the faceId in a List of Strings -> Arrays.asList(faceId).</li>
+          <li>The Identify method returns an Identification which contains a list of IdentificationCandidates. Select the Candidate with the highest confidence.</li>
           <li>Using the personId of the best Candidate, call the getPerson(personId) method. This method will return the details of that person.</li>
           <li>Complete the return object so the name of the person and the time of registration (new Date()) is returned to the front-end.</li>
         </ul>

@@ -38,6 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     
     </style>
+    <app-location route="{{route}}"></app-location>
 
     <iron-ajax
         id="imageAjax"
@@ -86,7 +87,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         modalSpinner: {
           type: Boolean,
           value: false
+        },
+        classId: {
+
         }
+      },
+
+      observers: [
+        'handleRouteChanged(route)',
+      ],
+      handleRouteChanged: function(route) {
+          console.log(route);
+          var id = route.path.split('/')[2];
+          console.log(id);
+          this.classId = id; 
       },
       ready: function() {
         var video = this.$.video;
@@ -113,7 +127,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
          var data = canvas.toDataURL('image/png');
          var imgData = data.replace(/^data:image\/(png|jpg);base64,/, "");
-         this.picture = {image: imgData};
+         this.picture = {image: imgData,classId: this.classId};
 
          this.$.imageAjax.generateRequest();
          this.modalText = "Hold on... checking your face now :-)."
