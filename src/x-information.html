@@ -25,14 +25,78 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+
+      .test{
+        font-weight: bold;
+      }
     </style>
    <div class="card">
       <h1>Introduction</h1>
       Introduction
-    <br>
-        <div class="card-actions">
-          <paper-button raised class="green" on-tap="add">Add New Course</paper-button>
-        </div>
+    </div>
+
+    <div class="card">
+    <h1>Task 1: API endpoints for Classes</h1>
+    <p>Create the API endpoints. Hardcode the responses for Task 1</p>
+    <p>
+        <ul>
+            <li>POST [/api/classes]: Creates a new Class</li>
+            <li>GET  [/api/classes]: Collects list of Classes</li>
+            <li>GET  [/api/classes/1]: Gets the Class with ID 1 (make ID configurable)</li>
+            <li>PUT  [/api/classes/1]: Updates the class with ID 1 (make ID configurable), Updating is used for Closing the class</li>
+        </ul>
+    </p>
+    <p>Classes have the following properties which must be returned as JSON</p>
+      <ol>
+            <li>id: ex. 1</li>
+            <li>classname: ex. "Java 4"</li>
+            <li>lector: ex. "Tom Cools"</li>
+            <li>topic: ex. "Spring Boot"</li>
+            <li>closed: ex. true</li>
+        </ol>
+
+    <p class="test">Test: The front-end is functional, yet uses hardcoded responses. Everything but the list of students on the details page should work.</p>
+
+    </div>
+
+     <div class="card">
+    <h1>Task 2: API endpoint for Presence</h1>
+    <p>Presence is the registration of a student being at a class. The class has already been created for you but is empty.
+    </p>
+    <p>
+        <ul>
+            <li>GET [/api/classes/1/presence]: Gets the list of people present in a class. 1 is the ID of a class. Make this configurable.</li>
+        </ul>
+    </p>
+    <p>The "Presence" entity has the following properties which must be returned as JSON</p>
+      <ol>
+            <li>id: ex. 1</li>
+            <li>classId: ex. 1</li>
+            <li>studentName: ex. "Tom Cools"</li>
+            <li>arrival: ex. "1489560954" (time since 1970-> use Date class)</li>
+        </ol>
+
+    <p class="test">Test: The front-end is functional, yet uses hardcoded responses.</p>
+    </div>
+
+
+    <div class="card">
+    <h1>Extra tasks</h1>
+    <p>These tasks are extra for when you have more time. You can choose any in this list.</p>
+    
+    <h2>Add Emotion</h2>
+    <p>
+      Microsoft Cognitive Services also has an Emotion API. This returns the Emotion of people seen on a picture.
+      You will need to make an account first to retrieve your API Key.
+      <p>URL: <a href="https://www.microsoft.com/cognitive-services/en-us/emotion-api">https://www.microsoft.com/cognitive-services/en-us/emotion-api</a></p>
+
+      Call the emotion API and instead of saving just the "studentName" in the <strong>Presence entity</strong>, concatenate it with the biggest emotion.
+      <ol>
+            <li>Before: studentName= "Tom Cools"</li>
+            <li>After: studentName= "Tom Cools - happiness"</li>
+        </ol>
+    </p>
+    <p class="test">Test: The front-end is functional, yet uses hardcoded responses.</p>
     </div>
   </template>
 
